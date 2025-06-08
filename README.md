@@ -46,12 +46,12 @@ This project highlights my skills in administering directory services, configuri
 
 ### Prerequisites
 
-- AWS access with EC2 & networking rights
-- Windows Server & AD fundamentals
-- Domain-joined Windows client
-- Centralized log server
-- Automation platform with alerting
-- Remote access & firewall setup skills
+- **Cloud Environment**: Access to AWS with permissions to deploy and manage EC2 instances and configure networking components
+- **Windows Server Administration**: Proficient in managing Windows Server and Active Directory environments
+- **Domain Management**: Experience in joining and administering domain-joined Windows clients
+- **Log Aggregation**: Skilled in centralized log collection and processing from diverse sources
+- **Automation & Orchestration**: Ability to design and implement automated workflows with multi-channel alerting mechanisms
+- **Network Security**: Expertise in configuring secure remote access and managing firewall/security group policies for inter-instance communication
 
 ### Setup Diagram
 
