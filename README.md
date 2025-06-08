@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Security teams often struggle with slow response times to compromised devices in enterprise environments due to manual alerting and remediation processes. To address this, I designed and deployed a cloud-based lab simulating a domain-controlled network with centralized log collection and automated incident response.
+Security teams often struggle with slow response times to compromised devices in enterprise environments due to manual alerting and remediation processes. To address this, I designed and deployed a[...]
 
-The system detects suspicious activity on a managed endpoint, triggers a notification workflow requiring human confirmation, and then automatically isolates the compromised device to prevent further damage.
+The system detects suspicious activity on a managed endpoint, triggers a notification workflow requiring human confirmation, and then automatically isolates the compromised device to prevent furthe[...]
 
-This project highlights my skills in administering directory services, configuring secure cloud network communications, ingesting and analyzing security telemetry, and building automated workflows that reduce response times significantly while maintaining control through human-in-the-loop approval.
+This project highlights my skills in administering directory services, configuring secure cloud network communications, ingesting and analyzing security telemetry, and building automated workflows [...]
 
 ---
 
@@ -39,6 +39,25 @@ This project highlights my skills in administering directory services, configuri
   - [Future Enhancements](#future-enhancements)
 - [📚 References & Documentation](#references--documentation)
 - [🧑‍💻 Author & Contact](#author--contact)
+
+---
+
+## Setup and Prerequisites
+
+### Prerequisites
+
+- AWS access with EC2 & networking rights
+- Windows Server & AD fundamentals
+- Domain-joined Windows client
+- Centralized log server
+- Automation platform with alerting
+- Remote access & firewall setup skills
+
+### Setup Diagram
+
+Below is the architecture and setup diagram for this Automated Threat Response Lab:
+
+![Setup Layout Diagram](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/raw/main/Setup/Layout%20Diagram.jpg)
 
 ---
 
