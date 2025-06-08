@@ -2,9 +2,11 @@
 
 ## Introduction
 
-This project showcases my ability to design and deploy secure, automated threat response solutions in cloud environments. I built a hands-on lab simulating enterprise security with Windows Active Directory, Splunk SIEM, and Shuffle SOAR—all integrated on AWS. The system detects suspicious activity, notifies security via Slack and email, and can automatically isolate compromised devices with human-in-the-loop approval. 
+Security teams often struggle with slow response times to compromised devices in enterprise environments due to manual alerting and remediation processes. To address this, I designed and deployed a cloud-based lab simulating a domain-controlled network with centralized log collection and automated incident response.
 
-Key skills demonstrated include: AWS cloud infrastructure, Windows domain administration, security telemetry, SIEM/SOAR integration, and incident response automation.
+The system detects suspicious activity on a managed endpoint, triggers a notification workflow requiring human confirmation, and then automatically isolates the compromised device to prevent further damage.
+
+This project highlights my skills in administering directory services, configuring secure cloud network communications, ingesting and analyzing security telemetry, and building automated workflows that reduce response times significantly while maintaining control through human-in-the-loop approval.
 
 ---
 
