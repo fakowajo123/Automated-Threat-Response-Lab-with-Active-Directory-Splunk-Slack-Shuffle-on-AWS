@@ -60,8 +60,6 @@ Below is the architecture and setup diagram for this Automated Threat Response L
 
 ![Setup Layout Diagram](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/raw/main/Setup/Layout%20Diagram.jpg)
 
-**[Place Screenshot Here: AWS Resource Group/Network Architecture]**
-
 ---
 
 ## Architecture
@@ -90,8 +88,6 @@ This lab leverages AWS to simulate a production-like environment for automated t
 3. Splunk triggers an alert, sending details to Shuffle.
 4. Shuffle orchestrates a notification to Slack, requesting human confirmation.
 5. Upon approval, Shuffle automates disabling the compromised user account in Active Directory.
-
-**[Place Screenshot Here: High-level Flow/Process Diagram]**
 
 ---
 
@@ -284,8 +280,6 @@ The automation workflow proceeds as follows:
   1. Generate test event (manual logon failure, PowerShell execution).
   2. Follow alert through pipeline.
   3. Confirm automated response and restoration steps.
-
-**[Place Screenshot Here: Incident Simulation Steps/Results]**
 
 ---
 
