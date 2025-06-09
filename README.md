@@ -236,29 +236,27 @@ The automation workflow proceeds as follows:
 
    ![Automation Layout](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Automation%20Layout.jpg)
 
-2. **Analyst Input to Disable Account or Not**
+2. **Email Notification (Optional)**
 
-   After a Splunk alert is triggered (e.g., from suspicious login activity), the analyst receives an actionable message (usually in Slack) with options to disable the account or not.
+   Email notifications can also be configured for critical alerts and workflow steps. In this workflow, the email notification is sent immediately after the alert is triggered and right before analyst input. This means the analyst or designated recipients are notified by email (or other channels) that an action is required, before any analyst input is provided.
+
+   ![Email Notification Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Email%20Notification.jpg)
+
+3. **Analyst Input to Disable Account or Not**
+
+   After the email is sent, the analyst receives an actionable message (usually in Slack, optionally via email) with options to disable the account or not.
 
    ![Analyst Option to Disable Account](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/click%20option.jpg)
 
-3. **Account Disabled by Active Directory Automation**
+4. **Account Disabled by Active Directory Automation**
 
    If the analyst chooses to disable the account, the automation proceeds and disables the user in Active Directory.
 
-4. **Slack Alert Notification**
+5. **Slack Alert Notification**
 
    The analyst and/or team receives a Slack alert confirming the action taken.
 
    ![Slack Alert Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Slack%20Alert.jpg)
-
-5. **Email Notification (Optional)**
-
-   Email notifications can also be configured for critical alerts and workflow steps. For example, when a key action is taken or approval is needed, an email notification can be sent to designated recipients.
-
-   ![Email Notification Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Email%20Notification.jpg)
-
----
 
 ## 🔐 Automated Response Workflow
 
