@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Security teams often struggle with slow response times to compromised devices in enterprise environments due to manual alerting and remediation processes. To address this, I designed and deployed a lab that demonstrates an end-to-end automated threat response solution using Active Directory, Splunk, Slack, Shuffle (SOAR), and AWS infrastructure.
+Security teams often struggle with slow response times to compromised devices in enterprise environments due to manual alerting and remediation processes. To address this, I designed and deployed a[...]
 
-The system detects suspicious activity on a managed endpoint, triggers a notification workflow requiring human confirmation, and then automatically isolates the compromised device or user account to prevent further spread—all in a cloud lab environment.
+The system detects suspicious activity on a managed endpoint, triggers a notification workflow requiring human confirmation, and then automatically isolates the compromised device or user account t[...]
 
-This project highlights my skills in administering directory services, configuring secure cloud network communications, ingesting and analyzing security telemetry, and building automated workflows for incident response.
+This project highlights my skills in administering directory services, configuring secure cloud network communications, ingesting and analyzing security telemetry, and building automated workflows [...]
 
 ---
 
@@ -71,7 +71,7 @@ This lab leverages AWS to simulate a production-like environment for automated t
 - **Active Directory Domain Controller** on Windows Server EC2.
 - **Windows Test Client** joined to the AD domain.
 - **Splunk SIEM** hosted on a dedicated EC2 instance.
-- **Shuffle SOAR** for automating incident response and integrations (Shuffle SOAR is deployed as a managed service accessible over the internet, so no AWS EC2 instance is required for SOAR in this architecture).
+- **Shuffle SOAR** for automating incident response and integrations (Shuffle SOAR is deployed as a managed service accessible over the internet, so no AWS EC2 instance is required for SOAR in thi[...]
 - **Slack** for real-time alerting and human-in-the-loop confirmation.
 - **AWS Security Groups & VPC** for network segmentation and control.
 
@@ -105,8 +105,6 @@ This lab leverages AWS to simulate a production-like environment for automated t
 - Use Network ACLs for extra segmentation.
 - Ensure no public IP exposure except for admin access (ideally use VPN or jumpbox).
 
-**[Place Screenshot Here: Security Group Rules/Network ACLs]**
-
 ---
 
 ## 🖥️ Active Directory Setup
@@ -115,23 +113,27 @@ This lab leverages AWS to simulate a production-like environment for automated t
 
 - Deploy Windows Server EC2 (`t3.xlarge` or higher: 4 vCPUs, 16GB RAM).
 - Install "Active Directory Domain Services" role.
-- Promote server to Domain Controller (e.g., domain: `lab.local`).
+- Promote server to Domain Controller (e.g., domain: `lab.local`). 
+![Active Directory Installation Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Active%20Directory%20installation.jpg)
 
-**[Place Screenshot Here: AD DS Installation and Promotion Steps]**
+**For step-by-step instructions to install Active Directory, follow this guide:**  
+[How to Install Active Directory Domain Services on Windows Server](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/deploy/install-active-directory-domain-services--level-100-)
 
-### DNS Roles & GPO Policies
+- After installing Active Directory, restart the PC.
+- Next, open "Active Directory Users and Computers" and proceed to create the user account as shown below.
 
-- Allow log forwarding to Splunk.
 
-**[Place Screenshot Here: DNS Role Setup/GPO Policy Editor]**
 
 ### User Creation in AD & Machine Join
 
 - In Active Directory, create a user account from the AD Users and Computers console. Make this user a member of the "Domain Admins" group so that it has administrative privileges.
+![User Creation Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/User%20Creation.jpg)
 - When deploying the Windows Test Client, join it to the `lab.local` domain using this user account.
 - Log into the Test Client with the domain user credentials (now with admin rights) so you can install required software and perform administrative tasks on the test machine.
 
-**[Place Screenshot Here: Creating User in AD & Assigning Domain Admin Rights]**
+**Automation Account Creation:**  
+- For the automation workflows (such as those orchestrated by Shuffle), you will need to create a separate domain account in Active Directory that will be used specifically for authentication by automation tools.  
+- This account can be named anything you choose (e.g., `automation_user`), but ensure you document its credentials securely as they will be required for automated actions such as disabling user accounts via SOAR integrations.
 
 ### Joining Test Machine to Domain
 
@@ -139,8 +141,11 @@ This lab leverages AWS to simulate a production-like environment for automated t
 - Set DNS to the DC's private IP.
 - Join to `lab.local` domain using the domain admin user you created.
 - Test authentication and GPO application.
+![User Adding to Domain Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/User%20Adding%20.jpg)
 
-**[Place Screenshot Here: Joining Test Machine to Domain]**
+- Once you have successfully added the user to the PC and joined it to the domain, you should see confirmation like the screenshot below:
+
+![Account Joined to Domain Proof](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/account%20in%20.jpg)
 
 ---
 
@@ -149,14 +154,15 @@ This lab leverages AWS to simulate a production-like environment for automated t
 ### EC2 Setup for Splunk
 
 - Launch a separate EC2 (Ubuntu Server, `t3.xlarge` or higher: 4 vCPUs, 16GB RAM).
-- Download Splunk Enterprise from the official Splunk site and install it on Ubuntu. Use sudo as needed.
-- To start Splunk for the first time, go to the Splunk installation directory's `bin` folder and run `./splunk start`.
-- Set the username and password as prompted.
-- Access the Splunk web interface via port 8000 and log in.
+- To install Splunk on Ubuntu, follow the official guide: [Splunk Install Guide for Ubuntu](https://docs.splunk.com/Documentation/Splunk/latest/Installation/InstallonLinux)
+- During installation, you will be prompted to create a Splunk username and password.
+- Once Splunk is installed and started, you can access the Splunk web interface by navigating to `http://your-ec2-ip:8000` in your browser.
+- The login page should look like this:
+  
+  ![Splunk GUI Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/splunk%20GUI.jpg)
+
 - Create a new index in Splunk that will be used for log ingestion from the forwarders.
 - For further Splunk usage, users should refer to Splunk documentation and tutorials to learn about configuring searches, alerts, dashboards, and advanced features.
-
-**[Place Screenshot Here: Splunk Installation, Initial Login, and Index Creation]**
 
 ### Universal Forwarder on AD & Test Client
 
@@ -172,24 +178,40 @@ This lab leverages AWS to simulate a production-like environment for automated t
   ```
 - Replace `<your-index-name>` with the name of the index you created earlier in Splunk.
 
-**[Place Screenshot Here: Splunk Universal Forwarder Installation and Configuration]**
+#### Splunk Forwarding & Receiving Setup
 
-### Inputs for AD Logs & Windows Events
+- In the Splunk GUI, navigate to **Settings > Forwarding and receiving**.
+- Under **Receive data**, click **Add new** and set the listening port to `9997` (this is the default and recommended port for Splunk indexers to receive data from forwarders).
+- Ensure this port is open in your security group/firewall for the relevant sources.
 
-- In Splunk, configure data inputs for:
-  - Windows Security, Application, System logs.
-  - Directory Service logs (on DC).
-- Use Splunk Add-on for Microsoft Windows for parsing and CIM compliance.
+- On the Domain Controller and Test Client, configure the Universal Forwarder to send data to the Splunk server's private IP on port `9997`.
 
-**[Place Screenshot Here: Data Inputs Setup in Splunk]**
+#### Windows Add-on for Splunk
 
-### Alert Creation
+- To properly parse and enrich Windows event logs in Splunk, you need to install the Windows Add-on for Splunk.
+- In the Splunk GUI, navigate to **Apps > Find More Apps** and search for "Windows Add-on".
+- Install the Windows Add-on for Microsoft Windows as shown below:
 
-- Create correlation searches in Splunk (e.g., multiple failed logins, privilege escalation).
-- Configure alert actions to send events to Shuffle via webhook or app integration.
-- For detailed instructions or advanced configurations, users are encouraged to learn more via Splunk's official documentation.
+  ![Windows Add-on for Splunk Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/windows%20add%20on.jpg)
 
-**[Place Screenshot Here: Splunk Alert Configuration]**
+#### Testing Telemetry
+
+- To confirm that telemetry is coming through, create a Splunk search rule that captures unauthorized successful logins.
+- Sort the results by `IP address`, `time`, `computer name`, `source`, `user`, and `count`.
+- This search rule can be used as the basis for an alert in Splunk which will trigger actions via the Shuffle webhook integration.
+
+Example SPL (Search Processing Language) rule:
+```
+index=<your-index-name> EventCode=4624 LogonType=3 NOT (Account_Name="ANONYMOUS LOGON")
+| stats count by src_ip, _time, ComputerName, source, Account_Name
+| sort by count desc
+```
+- Adjust the field names as per your actual log fields and requirements.
+- Use this rule to create a Splunk alert and configure a webhook action to integrate with Shuffle for automated response.
+
+- Once you have telemetry successfully coming from both the domain controller and test PC, you should see data like the example below:
+
+![Telemetry from Both Hosts](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Telemetry%20from%20both%20hosts%20.jpg)
 
 ---
 
@@ -202,30 +224,35 @@ This lab leverages AWS to simulate a production-like environment for automated t
 - This information is then sent from Shuffle to Slack via Shuffle’s Slack integration.
 - Ensure Slack is added as an application to Shuffle and authenticated.
 
-**[Place Screenshot Here: Splunk Alert Webhook to Shuffle]**
+### Automated Response Workflow & Analyst Interaction
 
-**[Place Screenshot Here: Shuffle Playbook Logic/Workflow]**
+The automation workflow proceeds as follows:
 
-### Slack Notification Configuration
+1. **Automation Workflow Layout**
 
-- Slack receives the alert with the details from Shuffle.
-- The notification includes buttons or options for the analyst to approve or deny disabling the user account.
-- The user’s decision (input) is captured by Shuffle for the next step.
+   ![Automation Layout](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Automation%20Layout.jpg)
 
-**[Place Screenshot Here: Example Slack Alert with Action Buttons]**
+2. **Analyst Input to Disable Account or Not**
 
-### User Input & Automated Account Disable via AD
+   After a Splunk alert is triggered (e.g., from suspicious login activity), the analyst receives an actionable message (usually in Slack) with options to disable the account or not.
 
-- If the analyst chooses to disable the user, Shuffle—using its Active Directory application and authenticated connection to the domain controller—issues a command to disable the user account in AD.
-- Shuffle then queries the domain controller to confirm the status of the user account (check if it is disabled).
+   ![Analyst Option to Disable Account](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/click%20option.jpg)
 
-**[Place Screenshot Here: Shuffle AD Action/Confirmation of User Disabled]**
+3. **Account Disabled by Active Directory Automation**
 
-### Confirmation & Final Notification
+   If the analyst chooses to disable the account, the automation proceeds and disables the user in Active Directory.
 
-- Once the user is confirmed as disabled, Shuffle sends a final notification to Slack stating that the user account has been successfully disabled.
+4. **Slack Alert Notification**
 
-**[Place Screenshot Here: Slack Final Confirmation Message]**
+   The analyst and/or team receives a Slack alert confirming the action taken.
+
+   ![Slack Alert Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Slack%20Alert.jpg)
+
+5. **Email Notification (Optional)**
+
+   Email notifications can also be configured for critical alerts and workflow steps. For example, when a key action is taken or approval is needed, an email notification can be sent to designated recipients.
+
+   ![Email Notification Screenshot](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Email%20Notification.jpg)
 
 ---
 
@@ -240,16 +267,6 @@ This lab leverages AWS to simulate a production-like environment for automated t
   4. Analyst reviews and approves in Slack/email.
   5. Shuffle uses its AD integration to disable the affected user account via the domain controller.
   6. Shuffle confirms the user's account is disabled, then notifies Slack of the result.
-
-**[Place Screenshot Here: End-to-End Workflow Diagram or Timeline]**
-
-### Workflow Diagrams & Screenshots
-
-- Include images of:
-  - Splunk alert configuration.
-  - Shuffle playbook graph.
-  - Slack incident notification example.
-  - Confirmation of user disablement in AD.
 
 ---
 
@@ -295,6 +312,7 @@ This lab leverages AWS to simulate a production-like environment for automated t
 
 - [Active Directory Domain Services](https://docs.microsoft.com/en-us/windows-server/identity/active-directory-domain-services)
 - [Splunk Install Guide](https://docs.splunk.com/Documentation/Splunk/latest/Installation/InstallonWindows)
+- [Splunk Install Guide for Ubuntu](https://docs.splunk.com/Documentation/Splunk/latest/Installation/InstallonLinux)
 - [Splunk Forwarder](https://docs.splunk.com/Documentation/Forwarder/latest/Forwarder/Deploytheuniversalforwarder)
 - [Shuffle Docs](https://shuffler.io/docs/)
 - AWS Security Blog, Reddit r/sysadmin, GitHub security labs
