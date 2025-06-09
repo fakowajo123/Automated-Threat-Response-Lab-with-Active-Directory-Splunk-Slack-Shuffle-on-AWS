@@ -213,6 +213,10 @@ index=<your-index-name> EventCode=4624 LogonType=3 NOT (Account_Name="ANONYMOUS 
 
 ![Telemetry from Both Hosts](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Telemetry%20from%20both%20hosts%20.jpg)
 
+The screenshot below shows a simulated alert in Splunk for an unauthorized successful login, which serves as a trigger for the automated incident response in this lab:
+
+![Alert From Splunk](https://github.com/fakowajo123/Automated-Threat-Response-Lab-with-Active-Directory-Splunk-Slack-Shuffle-on-AWS/blob/main/Screenshots/Alert%20From%20splunk.jpg)
+
 ---
 
 ## 🔁 SOAR Integration with Shuffle & Slack
